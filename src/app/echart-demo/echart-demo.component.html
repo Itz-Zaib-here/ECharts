@@ -1,1 +1,65 @@
-<div echarts [options]="chartOption" class="chart"></div>
+<div class="container">
+  <h1 class="text-center">ECharts Demo</h1>
+  <div class="row text-center">
+    <div class="col-md-12">
+      <h2>Data from API</h2>
+      <pre>{{ dataVisible | json }}</pre>
+    </div>
+    <div class="row my-4">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Chart Overview</h5>
+            <p class="card-text">
+              This page demonstrates ECharts integration with Angular. Click
+              "Get Data" to fetch and visualize data from the API.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Features</h5>
+            <ul class="card-text">
+              <li>Fetch data from API</li>
+              <li>Display data as JSON</li>
+              <li>Interactive chart rendering</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Instructions</h5>
+            <p class="card-text">
+              Use the buttons below to load or close the data. The chart will
+              update automatically.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <button
+        (click)="getData()"
+        *ngIf="!dataVisible"
+        class="btn btn-primary m-2"
+      >
+        Get Data
+      </button>
+      <button
+        (click)="closeData()"
+        *ngIf="dataVisible"
+        class="btn btn-danger m-2"
+      >
+        close
+      </button>
+    </div>
+    <div class="chart-container" *ngIf="dataVisible">
+      <div echarts [options]="chartOption" class="chart"></div>
+    </div>
+    <!-- <div echarts [options]="chartOption" class="chart"></div> -->
+  </div>
+</div>
