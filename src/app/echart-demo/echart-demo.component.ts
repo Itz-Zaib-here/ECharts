@@ -1,87 +1,99 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgxEchartsModule } from 'ngx-echarts';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { EChartsOption } from 'echarts';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
   selector: 'app-echart-demo',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule],
-  template: `
-    <div class="chart-container">
-      <echarts [options]="chartOption" class="chart"></echarts>
-    </div>
-  `,
-  styles: [
-    `
-      .chart-container {
-        width: 100%;
-        height: 400px;
-      }
-      .chart {
-        width: 500px;
-        height: 500px;
-      }
-    `,
-  ],
+  imports: [HttpClientModule, NgxEchartsModule, CommonModule],
+  templateUrl: './echart-demo.component.html',
+  styleUrls: ['./echart-demo.component.css'],
 })
 export class EchartDemoComponent {
-  chartOption: EChartsOption = {
-    title:{
-      text:'Line Chart',
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: [352, 350, 240, 300, 150, 100, 260],
-        type: 'line',
-      },
-      {
-        data:[122,342,232,123,121,143,134],
-        type:'line',
-      },
-      {
-        data:[102,242,132,23,21,43,34],
-        type:'line',        
+  chartOption: EChartsOption = {};
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.http.get<any>('https://api.coingecko.com/api/v3/exchange_rates').subscribe((res) => {
+      console.log(res);
+      if (!res || !res.rates) {
+        console.error('Invalid response from API');
+        return;
       }
-    ],
-  };
+      const rates = res.rates
+      const currencies = Object.keys(rates);
+      const values = currencies.map((key) => rates[key].value);
+      const labels = currencies.map((key) => rates[key].name);
 
-
-// chartOption:EChartsOption = {
-//   title: [
-//     {
-//       text: 'Tangential Polar Bar Label Position (middle)'
-//     }
-//   ],
-//   polar: {
-//     radius: [30, '80%']
-//   },
-//   angleAxis: {
-//     max: 4,
-//     startAngle: 75
-//   },
-//   radiusAxis: {
-//     type: 'category',
-//     data: ['a', 'b', 'c', 'd']
-//   },
-//   tooltip: {},
-//   series: {
-//     type: 'bar',
-//     data: [2, 1.2, 2.4, 3.6],
-//     coordinateSystem: 'polar',
-//     label: {
-//       show: true,
-//       position: 'middle', // or 'start', 'insideStart', 'end', 'insideEnd'
-//       formatter: '{b}: {c}'
-//     }
-//   }
-// };
-
+      this.chartOption = {
+        title: {
+          text: 'Currency Exchange Rates',
+          left: 'center',
+          top: 10,
+          textStyle: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#333'
+          }
+        },
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          borderColor: '#ccc',
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '5%',
+          bottom: '10%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: labels,
+          axisLabel: {
+            rotate: 45,
+            color: '#666',
+            fontSize: 12
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            color: '#666'
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#eee'
+            }
+          }
+        },
+        series: [
+          {
+            name: 'Rate',
+            type: 'line',
+            smooth: true,
+            data: values,
+            lineStyle: {
+              width: 3,
+              color: '#4f8aff'
+            },
+            itemStyle: {
+              color: '#4f8aff'
+            },
+            areaStyle: {
+              color: 'rgba(79,138,255,0.2)'
+            }
+          }
+        ]
+      };
+    });
+  }
 }
