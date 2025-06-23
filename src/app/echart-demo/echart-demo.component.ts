@@ -14,13 +14,15 @@ import { NgxEchartsModule } from 'ngx-echarts';
 export class EchartDemoComponent implements OnInit {
   dataVisible = false;
   chartOption: EChartsOption = {};
+  pieChartOption: EChartsOption = {};
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getData();
+  }
 
   getData(): void {
-    this.dataVisible = true;
     this.http
       .get<any>('https://api.coingecko.com/api/v3/exchange_rates')
       .subscribe((res) => {
@@ -33,6 +35,7 @@ export class EchartDemoComponent implements OnInit {
         const values = currencies.map((key) => rates[key].value);
         const labels = currencies.map((key) => rates[key].name);
 
+        // Line Chart
         this.chartOption = {
           title: {
             text: 'Currency Exchange Rates',
@@ -98,11 +101,60 @@ export class EchartDemoComponent implements OnInit {
             },
           ],
         };
-      });
-  }
 
-  closeData(): void {
-    this.dataVisible = false;
-    this.chartOption = {};
+        // Pie Chart 
+        this.pieChartOption = {
+          title: {
+            text: 'Top Currency Rates',
+            left: 'center',
+            top: 10,
+          },
+          tooltip: {
+            trigger: 'item',
+          },
+          legend: {
+            orient: 'horizontal',
+            bottom: 0,
+            left: 'center',
+            type: 'scroll', 
+            textStyle: {
+              fontSize: 12,
+              color: '#333',
+            },
+            pageButtonItemGap: 5,
+            pageIconSize: 22,
+            pageTextStyle: {
+              color: '#999',
+            },
+          },
+
+          series: [
+            {
+              name: 'Rate',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                show: false,
+                position: 'center',
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '16',
+                  fontWeight: 'bold',
+                },
+              },
+              labelLine: {
+                show: false,
+              },
+              data: currencies.map((key) => ({
+                name: rates[key].name,
+                value: rates[key].value,
+              })),
+            },
+          ],
+        };
+      });
   }
 }

@@ -5,6 +5,7 @@
       <h2>Data from API</h2>
       <pre>{{ dataVisible | json }}</pre>
     </div>
+
     <div class="row my-4">
       <div class="col-md-4">
         <div class="card">
@@ -41,25 +42,13 @@
         </div>
       </div>
     </div>
-    <div class="text-center">
-      <button
-        (click)="getData()"
-        *ngIf="!dataVisible"
-        class="btn btn-primary m-2"
-      >
-        Get Data
-      </button>
-      <button
-        (click)="closeData()"
-        *ngIf="dataVisible"
-        class="btn btn-danger m-2"
-      >
-        close
-      </button>
+    <div class="row">
+      <div class="">
+        <div echarts [options]="chartOption" class="chart mb-4"></div>
+      </div>
+      <div class="">
+        <div echarts [options]="pieChartOption" class="chart mb-4"></div>
+      </div>
     </div>
-    <div class="chart-container" *ngIf="dataVisible">
-      <div echarts [options]="chartOption" class="chart"></div>
-    </div>
-    <!-- <div echarts [options]="chartOption" class="chart"></div> -->
   </div>
 </div>
