@@ -163,55 +163,18 @@ export class EchartDemoComponent implements OnInit {
             text: 'Currency Exchange Rates',
             left: 'center',
             top: 10,
-            textStyle: {
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#333',
-            },
-          },
-          tooltip: {
-            trigger: 'axis',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            borderColor: '#ccc',
-            textStyle: {
-              color: '#fff',
-            },
-          },
-          grid: {
-            left: '5%',
-            right: '5%',
-            bottom: '10%',
-            containLabel: true,
           },
           xAxis: {
             type: 'category',
-            boundaryGap: false,
             data: labels,
-            axisLabel: {
-              rotate: 45,
-              color: '#666',
-              fontSize: 12,
-            },
           },
           yAxis: {
             type: 'value',
-            axisLabel: {
-              color: '#666',
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#eee',
-              },
-            },
           },
           series: [
             {
-              name: 'Rate',
               type: 'bar',
               data: values,
-              itemStyle: {
-                color: '#4f8aff',
-              },
             },
           ],
         };
