@@ -16,6 +16,7 @@ export class EchartDemoComponent implements OnInit {
   chartOption: EChartsOption = {};
   pieChartOption: EChartsOption = {};
   barChart: EChartsOption = {};
+  radialPolarBarLabelPosition: EChartsOption = {};
 
   constructor(private http: HttpClient) {}
 
@@ -65,7 +66,7 @@ export class EchartDemoComponent implements OnInit {
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: labels,
+            data: labels.slice(0, 10), 
             axisLabel: {
               rotate: 45,
               color: '#666',
@@ -88,7 +89,7 @@ export class EchartDemoComponent implements OnInit {
               name: 'Rate',
               type: 'line',
               smooth: true,
-              data: values,
+              data: values.slice(0, 10), 
               lineStyle: {
                 width: 3,
                 color: '#4f8aff',
@@ -166,7 +167,7 @@ export class EchartDemoComponent implements OnInit {
           },
           xAxis: {
             type: 'category',
-            data: labels,
+            data: labels.slice(0, 6),
           },
           yAxis: {
             type: 'value',
@@ -174,9 +175,41 @@ export class EchartDemoComponent implements OnInit {
           series: [
             {
               type: 'bar',
-              data: values,
+              data: values.slice(0, 6),
             },
           ],
+        };
+
+        //Radial Polar Bar Label Position (middle)
+        this.radialPolarBarLabelPosition = {
+          title: [
+            {
+              text: 'Radial Polar Bar Label Position (middle)',
+            },
+          ],
+          polar: {
+            radius: [30, '80%'],
+          },
+          radiusAxis: {
+            max: 4,
+          },
+          angleAxis: {
+            type: 'category',
+            data: labels.slice(0, 6), 
+            startAngle: 75,
+          },
+          tooltip: {},
+          series: {
+            type: 'bar',
+            data: values.slice(0, 6), 
+            coordinateSystem: 'polar',
+            label: {
+              show: true,
+              position: 'middle',
+              formatter: '{b}: {c}',
+            },
+          },
+          animation: false,
         };
       });
   }
