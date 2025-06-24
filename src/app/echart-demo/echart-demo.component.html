@@ -55,6 +55,14 @@
       <div class="">
         <div echarts [options]="radialPolarBarLabelPosition" class="chart mb-4"></div>
       </div>
-    </div>
+<div class="">
+  <div
+    echarts
+    [options]="clickZoom"
+    class="chart mb-4"
+    (chartInit)="onChartInit($event)">
+  </div>
+</div>
+
   </div>
 </div>

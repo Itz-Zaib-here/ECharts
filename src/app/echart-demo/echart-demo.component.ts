@@ -3,6 +3,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
+import type { ECharts } from 'echarts';
 
 @Component({
   selector: 'app-echart-demo',
@@ -17,6 +19,11 @@ export class EchartDemoComponent implements OnInit {
   pieChartOption: EChartsOption = {};
   barChart: EChartsOption = {};
   radialPolarBarLabelPosition: EChartsOption = {};
+  clickZoom: EChartsOption = {};
+  private data: number[] = [];
+  private zoomSize: number = 6;
+  private myChart!: ECharts;
+  private dataAxis: string[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -32,6 +39,7 @@ export class EchartDemoComponent implements OnInit {
           console.error('Invalid response from API');
           return;
         }
+
         const rates = res.rates;
         const currencies = Object.keys(rates);
         const values = currencies.map((key) => rates[key].value);
@@ -66,7 +74,7 @@ export class EchartDemoComponent implements OnInit {
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: labels.slice(0, 10), 
+            data: labels.slice(0, 10),
             axisLabel: {
               rotate: 45,
               color: '#666',
@@ -89,7 +97,7 @@ export class EchartDemoComponent implements OnInit {
               name: 'Rate',
               type: 'line',
               smooth: true,
-              data: values.slice(0, 10), 
+              data: values.slice(0, 10),
               lineStyle: {
                 width: 3,
                 color: '#4f8aff',
@@ -129,7 +137,6 @@ export class EchartDemoComponent implements OnInit {
               color: '#999',
             },
           },
-
           series: [
             {
               name: 'Rate',
@@ -158,7 +165,7 @@ export class EchartDemoComponent implements OnInit {
           ],
         };
 
-        //bar chart
+        // Bar Chart
         this.barChart = {
           title: {
             text: 'Currency Exchange Rates',
@@ -180,7 +187,7 @@ export class EchartDemoComponent implements OnInit {
           ],
         };
 
-        //Radial Polar Bar Label Position (middle)
+        // Radial Polar Bar Chart
         this.radialPolarBarLabelPosition = {
           title: [
             {
@@ -195,13 +202,13 @@ export class EchartDemoComponent implements OnInit {
           },
           angleAxis: {
             type: 'category',
-            data: labels.slice(0, 6), 
+            data: labels.slice(0, 6),
             startAngle: 75,
           },
           tooltip: {},
           series: {
             type: 'bar',
-            data: values.slice(0, 6), 
+            data: values.slice(0, 6),
             coordinateSystem: 'polar',
             label: {
               show: true,
@@ -211,6 +218,83 @@ export class EchartDemoComponent implements OnInit {
           },
           animation: false,
         };
+
+        // Click Zoom Chart
+        const dataAxis = values
+          .slice(0, 20)
+          .map((_, i) => `${values[i]} ${i + 1}`);
+        const data = labels
+          .slice(0, 20)
+          .map(() => Math.round(Math.random() * 500));
+        const yMax = 500;
+
+        this.dataAxis = dataAxis;
+        this.data = data;
+
+        this.clickZoom = {
+          title: {
+            text: 'Feature Sample: Gradient Color, Shadow, Click Zoom',
+            subtext: 'Feature Sample: Gradient Color, Shadow, Click Zoom',
+          },
+          xAxis: {
+            data: dataAxis,
+            axisLabel: {
+              inside: true,
+              color: '#fff',
+            },
+            axisTick: { show: false },
+            axisLine: { show: false },
+            z: 10,
+          },
+          yAxis: {
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { color: '#999' },
+          },
+          dataZoom: [{ type: 'inside' }],
+          series: [
+            {
+              type: 'bar',
+              showBackground: true,
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: '#83bff6' },
+                  { offset: 0.5, color: '#188df0' },
+                  { offset: 1, color: '#188df0' },
+                ]),
+              },
+              emphasis: {
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: '#2378f7' },
+                    { offset: 0.7, color: '#2378f7' },
+                    { offset: 1, color: '#83bff6' },
+                  ]),
+                },
+              },
+              data: data,
+            },
+          ],
+        };
       });
+  }
+
+  onChartInit(chart: ECharts) {
+    this.myChart = chart;
+
+    this.myChart.on('click', (params: any) => {
+      const start =
+        this.dataAxis[Math.max(params.dataIndex - this.zoomSize / 2, 0)];
+      const end =
+        this.dataAxis[
+          Math.min(params.dataIndex + this.zoomSize / 2, this.data.length - 1)
+        ];
+
+      this.myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: start,
+        endValue: end,
+      });
+    });
   }
 }
