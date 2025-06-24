@@ -20,10 +20,12 @@ export class EchartDemoComponent implements OnInit {
   barChart: EChartsOption = {};
   radialPolarBarLabelPosition: EChartsOption = {};
   clickZoom: EChartsOption = {};
-  private data: number[] = [];
-  private zoomSize: number = 6;
-  private myChart!: ECharts;
-  private dataAxis: string[] = [];
+  newChart: EChartsOption = {};
+  sunburstChartOption: EChartsOption = {};
+  data: number[] = [];
+  zoomSize: number = 6;
+  myChart!: ECharts;
+  dataAxis: string[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -226,7 +228,6 @@ export class EchartDemoComponent implements OnInit {
         const data = labels
           .slice(0, 20)
           .map(() => Math.round(Math.random() * 500));
-        const yMax = 500;
 
         this.dataAxis = dataAxis;
         this.data = data;
@@ -277,6 +278,155 @@ export class EchartDemoComponent implements OnInit {
           ],
         };
       });
+
+    //new chart
+    interface GraphNode {
+      symbolSize: number;
+      label?: {
+        show?: boolean;
+      };
+    }
+
+    // Load Les Miserables graph data using Angular HttpClient
+    this.myChart?.showLoading();
+    this.http
+      .get<any>(
+        'https://fastly.jsdelivr.net/gh/apache/echarts-website@asf-site/examples/data/asset/data/les-miserables.json'
+      )
+      .subscribe((graph: any) => {
+        this.myChart?.hideLoading();
+
+        graph.nodes.forEach((node: GraphNode) => {
+          node.label = {
+            show: node.symbolSize > 30,
+          };
+        });
+        this.newChart = {
+          title: {
+            text: 'Les Miserables',
+            subtext: 'Default layout',
+            top: 'bottom',
+            left: 'right',
+          },
+          tooltip: {},
+          legend: [
+            {
+              // selectedMode: 'single',
+              data: graph.categories.map((a: { name: string }) => a.name),
+            },
+          ],
+          animationDuration: 1500,
+          animationEasingUpdate: 'quinticInOut',
+          series: [
+            {
+              name: 'Les Miserables',
+              type: 'graph',
+              legendHoverLink: false,
+              layout: 'none',
+              data: graph.nodes,
+              links: graph.links,
+              categories: graph.categories,
+              roam: true,
+              label: {
+                position: 'right',
+                formatter: '{b}',
+              },
+              lineStyle: {
+                color: 'source',
+                curveness: 0.3,
+              },
+              emphasis: {
+                focus: 'adjacency',
+                lineStyle: {
+                  width: 10,
+                },
+              },
+            },
+          ],
+        };
+
+        // this.myChart?.setOption(this.newChart);
+      });
+
+    //sunburst chart
+    var data = [
+      {
+        name: 'Grandpa',
+        children: [
+          {
+            name: 'Uncle Leo',
+            value: 15,
+            children: [
+              {
+                name: 'Cousin Jack',
+                value: 2,
+              },
+              {
+                name: 'Cousin Mary',
+                value: 5,
+                children: [
+                  {
+                    name: 'Jackson',
+                    value: 2,
+                  },
+                ],
+              },
+              {
+                name: 'Cousin Ben',
+                value: 4,
+              },
+            ],
+          },
+          {
+            name: 'Father',
+            value: 10,
+            children: [
+              {
+                name: 'Me',
+                value: 5,
+              },
+              {
+                name: 'Brother Peter',
+                value: 1,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Nancy',
+        children: [
+          {
+            name: 'Uncle Nike',
+            children: [
+              {
+                name: 'Cousin Betty',
+                value: 1,
+              },
+              {
+                name: 'Cousin Jenny',
+                value: 2,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    this.sunburstChartOption = {
+      series: {
+        type: 'sunburst',
+        data: data,
+        radius: [60, '90%'],
+        itemStyle: {
+          borderRadius: 7,
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+        },
+      },
+    };
   }
 
   onChartInit(chart: ECharts) {

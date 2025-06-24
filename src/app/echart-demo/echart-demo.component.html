@@ -53,16 +53,26 @@
         <div echarts [options]="barChart" class="chart mb-4"></div>
       </div>
       <div class="">
-        <div echarts [options]="radialPolarBarLabelPosition" class="chart mb-4"></div>
+        <div
+          echarts
+          [options]="radialPolarBarLabelPosition"
+          class="chart mb-4"
+        ></div>
       </div>
-<div class="">
-  <div
-    echarts
-    [options]="clickZoom"
-    class="chart mb-4"
-    (chartInit)="onChartInit($event)">
-  </div>
-</div>
-
+      <div class="">
+        <div
+          echarts
+          [options]="clickZoom"
+          class="chart mb-4"
+          (chartInit)="onChartInit($event)"
+        ></div>
+      </div>
+      <div style="height: 700px;">
+        <div  style="height: 700px;" echarts [options]="newChart" class="chart mb-4"></div>
+      </div>
+      <div class="">
+        <div echarts [options]="sunburstChartOption" class="chart mb-4"></div>
+      </div>
+    </div>
   </div>
 </div>
