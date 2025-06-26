@@ -1,0 +1,32 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">LOGO</div>
+    <nav class="desktop-nav">
+      <a routerLink="/">Home</a>
+      <a routerLink="/echart-demo">About</a>
+      <a href="#">Services</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="button-container">
+      <button class="cta-button">Get Started</button>
+      <button class="hamburger" id="hamburger-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Contact</a>
+    <button class="mobile-cta-button">Get Started</button>
+  </div>
+</header>
+
+<main>
+  <div style=" padding-top: 150px; text-align: center">
+    <router-outlet></router-outlet>
+  </div>  
+</main>
