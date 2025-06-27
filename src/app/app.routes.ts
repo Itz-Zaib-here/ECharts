@@ -4,7 +4,7 @@ import { EchartDemoComponent } from './echart-demo/echart-demo.component';
 
 export const routes: Routes = [
     {
-        path: '',
+        path: 'Home',
         component:HomeComponent
     },
     {
