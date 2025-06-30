@@ -1,0 +1,24 @@
+/* Basic styling for the chart container */
+.migration-flow-chart-container {
+  width: 100%;
+  height: 600px; /* Set a fixed height or use responsive units */
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--highcharts-background-color, white);
+}
+
+/* Ensure Highcharts elements adapt to the container */
+#container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Optional: Add some responsive adjustments */
+@media (max-width: 768px) {
+  .migration-flow-chart-container {
+    height: 400px; /* Adjust height for smaller screens */
+  }
+}
