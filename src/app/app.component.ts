@@ -6,7 +6,7 @@ import { ChartJsFileComponent } from './chart-js-file/chart-js-file.component';
 
 @Component({
   selector: 'app-root',
-  imports: [ChartJsFileComponent],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
