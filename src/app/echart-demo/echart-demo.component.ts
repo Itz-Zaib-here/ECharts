@@ -8,11 +8,12 @@ import type { ECharts } from 'echarts';
 import { ChartJsFileComponent } from '../chart-js-file/chart-js-file.component';
 import { HighChartsComponent } from '../high-charts/high-charts.component';
 import { BarHighChartComponent } from '../bar-high-chart/bar-high-chart.component';
+import { FunnelChartComponent } from '../funnel-chart/funnel-chart.component';
 
 @Component({
   selector: 'app-echart-demo',
   standalone: true,
-  imports: [HttpClientModule, NgxEchartsModule, CommonModule,ChartJsFileComponent,HighChartsComponent,BarHighChartComponent],
+  imports: [HttpClientModule, NgxEchartsModule, CommonModule,ChartJsFileComponent,HighChartsComponent,BarHighChartComponent,FunnelChartComponent],
   templateUrl: './echart-demo.component.html',
   styleUrls: ['./echart-demo.component.css'],
 })
