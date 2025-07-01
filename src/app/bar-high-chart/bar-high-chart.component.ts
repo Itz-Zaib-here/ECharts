@@ -13,12 +13,15 @@ export class BarHighChartComponent implements AfterViewInit {
         type: 'column',
         renderTo: 'barContainer',
       },
-      title:{
-        text:""
+      title: {
+        text: '',
       },
       xAxis: {
         categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United'],
         visible: false,
+      },
+      credits: {
+        enabled: false, // Hide Highcharts credits
       },
       yAxis: {
         visible: false,

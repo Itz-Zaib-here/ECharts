@@ -5,12 +5,12 @@ import { HighChartsComponent } from './high-charts/high-charts.component';
 
 export const routes: Routes = [
     {
-        path: 'Home',
-        component:HomeComponent
+        path: '',
+        component:EchartDemoComponent
     },
     {
-        path: 'echart-demo',
-        component:EchartDemoComponent
+        path: 'Home',
+        component:HomeComponent
     },
     {
         path: 'highCharts',
