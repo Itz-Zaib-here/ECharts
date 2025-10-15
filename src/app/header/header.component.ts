@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { DatabasePreviewComponent } from '../database-preview/database-preview';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterOutlet,RouterLink],
+  imports: [RouterOutlet,RouterLink,DatabasePreviewComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
